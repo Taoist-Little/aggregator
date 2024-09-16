@@ -74,7 +74,7 @@ class TaskConfig:
     special_protocols: bool = False
 
     # 对于具有邮箱域名白名单且需要验证码的情况，是否使用 Gmail 别名邮箱尝试，为 True 时表示不使用
-    rigid: bool = True
+    rigid: bool = False
 
     # 是否丢弃可能需要人机验证的站点
     chuck: bool = False
