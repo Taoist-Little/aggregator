@@ -514,7 +514,6 @@ class AirPort:
         retry: int,
         rate: float,
         bin_name: str,
-        tag: str,
         disable_insecure: bool = False,
         udp: bool = True,
         ignore_exclude: bool = False,
@@ -544,6 +543,7 @@ class AirPort:
                 timeout=30,
                 trace=trace,
                 interval=1,
+                max_size=15 * 1024 * 1024,
             ).strip()
 
         if "" == text or (
@@ -674,9 +674,6 @@ class AirPort:
                 name = re.sub(r"\s+(\d+)[\s_\-\|]+([A-Za-z])\b", r"-\1\2", name)
                 item["name"] = re.sub(r"(-\d+[A-Za-z])+$", "", name).upper()
 
-                if "" != tag.strip():
-                    item["name"] = tag.strip().upper() + "-" + item["name"]
-
                 # 方便过滤无效订阅
                 item["sub"] = self.sub
                 item["liveness"] = self.liveness
@@ -687,7 +684,7 @@ class AirPort:
                     if "tls" in item:
                         item["tls"] = True
 
-                if udp and "udp" not in item:
+                if udp and "udp" not in item and (item.get("type", "") != "snell" or int(item.get("version", 1)) == 3):
                     item["udp"] = True
 
                 proxies.append(item)
